@@ -19,3 +19,14 @@ def _get_erc20_data_from_json_file_as_list(path: str = ERC20_PATH) -> list:
 
 def _get_trading_pairs_data_as_list() -> list:
     return requests.get(url='https://api.gateio.ws/api/v4/spot/tickers').json()
+
+
+def _convert_balance_to_dollar(trading_pairs_data: list, symbol: str, balance: [float, int]) -> [float, None]:
+    return next(
+        (
+            round(balance * float(trading_pair['last']), 2)
+            for trading_pair in trading_pairs_data
+            if trading_pair['currency_pair'] == f"{symbol}_USDT"
+        ),
+        None,
+    )
