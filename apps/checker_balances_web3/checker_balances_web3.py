@@ -2,8 +2,9 @@ import logging
 import random
 import time
 
-from apps.checker_balances_web3.services import Web3Middleware
-from apps.checker_balances_web3.utils import (
+from .config import networks_data
+from .services import Web3Middleware
+from .utils import (
     get_addresses_from_txt_file_as_list,
     get_erc20_data_from_json_file_as_list,
     get_trading_pairs_data_as_list,
@@ -12,8 +13,9 @@ from apps.checker_balances_web3.utils import (
 
 
 class CheckerBalancesWeb3():
+    networks_data = networks_data
+
     def __init__(self,
-                 networks_data: list,
                  native_balance_bool: bool,
                  token_balance_bool: bool,
                  sleep_form: [float, int] = 0,
@@ -21,7 +23,6 @@ class CheckerBalancesWeb3():
                  ):
 
         self.web3_middleware: Web3Middleware = Web3Middleware
-        self.networks_data: list = networks_data
         self.native_balance_bool: bool = native_balance_bool
         self.token_balance_bool: bool = token_balance_bool
         self.sleep_form: [float, int] = sleep_form

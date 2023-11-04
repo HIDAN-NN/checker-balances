@@ -2,7 +2,7 @@ from json import load
 
 import requests
 
-from core.settings import ADDRESSES_PATH, ERC20_PATH
+from core import ADDRESSES_PATH, ERC20_PATH
 
 
 def get_addresses_from_txt_file_as_list(path: str = ADDRESSES_PATH) -> list[str]:
