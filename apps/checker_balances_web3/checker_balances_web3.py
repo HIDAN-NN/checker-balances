@@ -4,10 +4,10 @@ import time
 
 from apps.checker_balances_web3.services import Web3Middleware
 from apps.checker_balances_web3.utils import (
-    _get_addresses_from_txt_file_as_list,
-    _get_erc20_data_from_json_file_as_list,
-    _get_trading_pairs_data_as_list,
-    _convert_balance_to_dollar
+    get_addresses_from_txt_file_as_list,
+    get_erc20_data_from_json_file_as_list,
+    get_trading_pairs_data_as_list,
+    convert_balance_to_dollar
 )
 
 
@@ -26,15 +26,15 @@ class CheckerBalancesWeb3():
         self.token_balance_bool: bool = token_balance_bool
         self.sleep_form: [float, int] = sleep_form
         self.sleep_to: [float, int] = sleep_to
-        self._addresses_list: list = _get_addresses_from_txt_file_as_list()
-        self._erc20_data_as_list: list = _get_erc20_data_from_json_file_as_list()
-        self._trading_pairs_data_list: list = _get_trading_pairs_data_as_list()
-        self._convert_balance_to_dollar: [float, None] = _convert_balance_to_dollar
+        self._addresses_list: list = get_addresses_from_txt_file_as_list()
+        self.erc20_data_as_list: list = get_erc20_data_from_json_file_as_list()
+        self.trading_pairs_data_list: list = get_trading_pairs_data_as_list()
+        self.convert_balance_to_dollar: [float, None] = convert_balance_to_dollar
 
     def check_native_balance(self, address: str, network_data: list, web3_middleware) -> None:
         native_balance = web3_middleware.get_native_balance(address=address)
-        balance_to_dollar = self._convert_balance_to_dollar(
-            trading_pairs_data=self._trading_pairs_data_list,
+        balance_to_dollar = self.convert_balance_to_dollar(
+            trading_pairs_data=self.trading_pairs_data_list,
             symbol=network_data['coin'],
             balance=native_balance
         )
@@ -49,15 +49,15 @@ class CheckerBalancesWeb3():
             if len(token[1]) >= 42:
                 token_balance = web3_middleware.get_token_balance(
                     token_address=web3_middleware.checksum_address(token[1]),
-                    erc20_abi=self._erc20_data_as_list,
+                    erc20_abi=self.erc20_data_as_list,
                     address=address
                 )
                 if token[0] in ['USDT', 'BUSD', 'DAI', 'USDC']:
                     time.sleep(random.uniform(self.sleep_form, self.sleep_to))
                     logging.info(f"{address} - {network_data['chain']} - {round(token_balance, 2)} {token[0]}")
                 else:
-                    balance_to_dollar = self._convert_balance_to_dollar(
-                        trading_pairs_data=self._trading_pairs_data_list,
+                    balance_to_dollar = self.convert_balance_to_dollar(
+                        trading_pairs_data=self.trading_pairs_data_list,
                         symbol=token[0],
                         balance=token_balance
                     )
