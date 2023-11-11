@@ -5,10 +5,10 @@ from tools import init_logging
 
 def main() -> None:
     CheckerBalancesWeb3(
-        native_balance_bool=True,
-        token_balance_bool=False,
-        sleep_form=0.5,
-        sleep_to=1
+        check_native_balance_bool=True,
+        check_token_balance_bool=True,
+        show_empty_native_balances_bool=False,
+        show_empty_token_balances_bool=False
     ).main()
 
 
