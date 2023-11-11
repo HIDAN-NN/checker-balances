@@ -8,7 +8,6 @@ if getattr(sys, 'frozen', False):
 else:
     ROOT_PATH = Path(__file__).parent.parent.absolute()
 
-
 ADDRESSES_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('data').joinpath('addresses.txt')
 ERC20_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('data').joinpath('erc20.json')
 
