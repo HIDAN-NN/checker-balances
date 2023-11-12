@@ -14,7 +14,7 @@ networks_data = [
         'chain': 'Arbitrum One',
         'coin': 'ETH',
         'chain_id': 42161,
-        'rpc': 'https://arb1.arbitrum.io/rpc',
+        'rpc': 'https://rpc.ankr.com/arbitrum',
         'multicall_eth_contracts': "0x151E24A486D7258dd7C33Fb67E4bB01919B7B32c",
         'tokens': {
             'USDT': '',
@@ -26,7 +26,7 @@ networks_data = [
         'chain': 'Optimism',
         'coin': 'ETH',
         'chain_id': 10,
-        'rpc': 'https://optimism.llamarpc.com',
+        'rpc': 'https://rpc.ankr.com/optimism',
         'multicall_eth_contracts': "0xB1c568e9C3E6bdaf755A60c7418C269eb11524FC",
         'tokens': {
             'USDT': '',
@@ -37,7 +37,7 @@ networks_data = [
         'chain': 'Avalanche',
         'coin': 'AVAX',
         'chain_id': 43114,
-        'rpc': 'https://api.avax.network/ext/bc/C/rpc',
+        'rpc': 'https://rpc.ankr.com/avalanche',
         'multicall_eth_contracts': "0xD023D153a0DFa485130ECFdE2FAA7e612EF94818",
         'tokens': {
             'USDT': '',
@@ -48,7 +48,7 @@ networks_data = [
         'chain': 'BSC',
         'coin': 'BNB',
         'chain_id': 56,
-        'rpc': 'https://bsc-dataseed.binance.org',
+        'rpc': 'https://rpc.ankr.com/bsc',
         'multicall_eth_contracts': "0x2352c63A83f9Fd126af8676146721Fa00924d7e4",
         'tokens': {
             'USDT': '',
@@ -59,7 +59,7 @@ networks_data = [
         'chain': 'Polygon',
         'coin': 'MATIC',
         'chain_id': 137,
-        'rpc': 'https://polygon-rpc.com',
+        'rpc': 'https://rpc.ankr.com/polygon',
         'multicall_eth_contracts': "0x2352c63A83f9Fd126af8676146721Fa00924d7e4",
         'tokens': {
             'USDC': '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',

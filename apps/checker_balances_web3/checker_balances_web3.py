@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import random
 import time
@@ -72,11 +73,13 @@ class CheckerBalancesWeb3():
                         f"{balance_to_dollar} $"
                     )
 
-    def check_native_balance_multicall(self, web3_middleware: Web3Middleware, network_data: list):
-        native_balance_multicall_data = web3_middleware.get_native_balance_multicall(
+    async def check_native_balance_multicall(self, web3_middleware: Web3Middleware, network_data: list):
+
+        native_balance_multicall_data = await  web3_middleware.get_native_balance_multicall(
             multicall_eth_contracts=network_data['multicall_eth_contracts'],
             address_list=self._addresses_list,
         )
+
         for data in native_balance_multicall_data:
             if data[1] > 0:
                 balance_to_dollar = self.convert_balance_to_dollar(
@@ -84,26 +87,34 @@ class CheckerBalancesWeb3():
                     symbol=network_data['coin'],
                     balance=data[1]
                 )
+                # logger.info(
+                #     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']} -"
+                #     f" {balance_to_dollar} $"
+                # )
                 logging.info(
                     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']} -"
                     f" {balance_to_dollar} $"
                 )
             elif self.show_empty_native_balances_bool:
+                # logger.success(
+                #     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']}"
+                # )
                 logging.info(
                     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']}"
                 )
 
-    def check_token_balance_multicall(self,
-                                      web3_middleware: Web3Middleware,
-                                      network_data: list
-                                      ):
-        is_full_data, tokens_balances_multicall_data = web3_middleware.get_token_balance_multicall(
+    async def check_token_balance_multicall(self,
+                                            web3_middleware: Web3Middleware,
+                                            network_data: list
+                                            ):
+        is_full_data, tokens_balances_multicall_data = await  web3_middleware.get_token_balance_multicall(
             multicall_eth_contracts=network_data['multicall_eth_contracts'],
             address_list=self._addresses_list,
             erc20_data_list=self.erc20_data_list,
             tokens_tickets_list=[token[0] for token in network_data['tokens'].items() if len(token[1]) >= 42],
             tokens_address_list=[token[1] for token in network_data['tokens'].items() if len(token[1]) >= 42],
         )
+
         if is_full_data:
             for data in tokens_balances_multicall_data:
                 for token in data[1:]:
@@ -126,16 +137,21 @@ class CheckerBalancesWeb3():
             for data in tokens_balances_multicall_data:
                 logging.info(f"{data} - {network_data['chain']} - None")
 
-    def main(self):
-        for network_data in self.networks_data:
-            web3_middleware = self.web3_middleware(rpc=network_data['rpc'])
-            if self.check_native_balance_bool:
+    async def main(self):
+        if self.check_native_balance_bool:
+            tasks = [
                 self.check_native_balance_multicall(
-                    web3_middleware=web3_middleware,
-                    network_data=network_data
-                )
-            if self.check_token_balance_bool:
+                    web3_middleware=self.web3_middleware(rpc=network_data['rpc']),
+                    network_data=network_data)
+                for network_data in self.networks_data
+            ]
+            await asyncio.gather(*tasks)
+
+        if self.check_token_balance_bool:
+            tasks = [
                 self.check_token_balance_multicall(
-                    web3_middleware=web3_middleware,
-                    network_data=network_data
-                )
+                    web3_middleware=self.web3_middleware(rpc=network_data['rpc']),
+                    network_data=network_data)
+                for network_data in self.networks_data
+            ]
+            await asyncio.gather(*tasks)

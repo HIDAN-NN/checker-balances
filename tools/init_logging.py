@@ -7,8 +7,8 @@ from colorlog import ColoredFormatter
 def init_logging(is_verbose: bool = False):
     formatter = ColoredFormatter(
         "%(log_color)s[%(asctime)s.%(msecs)03d] "
-        "[PROCESS %(process)d %(processName)s] "
-        "[%(threadName)-10s] "
+        # "[PROCESS %(process)d %(processName)s] "
+        # "[%(threadName)-10s] "
         "%(levelname)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
         log_colors={
