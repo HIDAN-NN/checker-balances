@@ -35,6 +35,7 @@ class Web3Middleware:
         multicall_balances = await multicall_contract.functions.balances(
             checksum_address_list, checksum_tokens_address
         ).call()
+
         return [
             [address, float(Web3.from_wei(balance, 'ether'))]
             for balance, address in zip(multicall_balances, checksum_address_list)
@@ -72,4 +73,5 @@ class Web3Middleware:
                 tokens_balances_multicall_data[i_two].append(
                     {tokens_tickets_list[i]: balance_by_address[i] / 10 ** decimals_list[i]}
                 )
+
         return True, tokens_balances_multicall_data
