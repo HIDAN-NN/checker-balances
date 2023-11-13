@@ -58,3 +58,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Results
+results/**
+
+# Data
+data/addresses.txt
