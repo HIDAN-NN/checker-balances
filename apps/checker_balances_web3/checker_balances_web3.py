@@ -120,7 +120,7 @@ class CheckerBalancesWeb3():
                     for ticket in token:
                         if ticket in ['USDT', 'BUSD', 'DAI', 'USDC']:
                             logger.info(
-                                f"{data[0]} | {network_data['chain']} | {round(token[ticket], 6)} {ticket} | Stable"
+                                f"{data[0]} | {network_data['chain']} | {round(token[ticket], 6)} | {ticket} | Stable"
                             )
                         else:
                             balance_to_dollar = self.convert_balance_to_dollar(
@@ -129,7 +129,7 @@ class CheckerBalancesWeb3():
                                 balance=token[ticket]
                             )
                             logger.info(
-                                f"{data[0]} | {network_data['chain']} | {round(token[ticket], 6)} {ticket} | "
+                                f"{data[0]} | {network_data['chain']} | {round(token[ticket], 6)} | {ticket} | "
                                 f"{balance_to_dollar} $ | Token"
                             )
         if not is_full_data and self.show_empty_token_balances_bool:
