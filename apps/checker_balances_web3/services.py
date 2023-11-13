@@ -1,3 +1,4 @@
+from loguru import logger
 from web3 import Web3, AsyncHTTPProvider
 from web3.eth import AsyncEth
 
@@ -26,20 +27,25 @@ class Web3Middleware:
 
         return gwei_token_balance / 10 ** decimals
 
-    async def get_native_balance_multicall(self, multicall_eth_contracts: str, address_list: list[str], ) -> list:
+    async def get_native_balance_multicall(self, multicall_eth_contracts: str, address_list: list[str]) -> [list, None]:
         checksum_address_list = [self.checksum_address(address) for address in address_list]
         checksum_tokens_address = [self.checksum_address('0x0000000000000000000000000000000000000000')]
-        multicall_contract = self.web3.eth.contract(
-            address=self.checksum_address(multicall_eth_contracts), abi=MULTICALL_ABI
-        )
-        multicall_balances = await multicall_contract.functions.balances(
-            checksum_address_list, checksum_tokens_address
-        ).call()
+        try:
+            multicall_contract = self.web3.eth.contract(
+                address=self.checksum_address(multicall_eth_contracts), abi=MULTICALL_ABI
+            )
+            multicall_balances = await multicall_contract.functions.balances(
+                checksum_address_list, checksum_tokens_address
+            ).call()
 
-        return [
-            [address, float(Web3.from_wei(balance, 'ether'))]
-            for balance, address in zip(multicall_balances, checksum_address_list)
-        ]
+            return [
+                [address, float(Web3.from_wei(balance, 'ether'))]
+                for balance, address in zip(multicall_balances, checksum_address_list)
+            ]
+        except Exception as e:
+            logger.error(f"Get NATIVE balance multicall ERROR | {e}")
+
+            return None
 
     async def get_token_balance_multicall(self,
                                           multicall_eth_contracts: str,
@@ -50,28 +56,36 @@ class Web3Middleware:
                                           ) -> bool and list:
         checksum_address_list = [self.checksum_address(address) for address in address_list]
         if len(tokens_address_list) == 0:
+
             return False, checksum_address_list
+
         checksum_tokens_address_list = [self.checksum_address(token_address) for token_address in tokens_address_list]
         contracts_list = [
             self.web3.eth.contract(address=token_address, abi=erc20_data_list)
             for token_address in checksum_tokens_address_list
         ]
-        decimals_list = [await contract.functions.decimals().call() for contract in contracts_list]
-        multicall_contract = self.web3.eth.contract(
-            address=self.checksum_address(multicall_eth_contracts), abi=MULTICALL_ABI
-        )
-        multicall_balances = await multicall_contract.functions.balances(
-            checksum_address_list, checksum_tokens_address_list
-        ).call()
-        tokens_balances_multicall_data = [[address] for address in checksum_address_list]
-        for i_one, i_two in zip(
-                range(0, len(multicall_balances), len(tokens_tickets_list)),
-                range(len(checksum_address_list))
-        ):
-            balance_by_address = multicall_balances[i_one:i_one + len(tokens_tickets_list)]
-            for i in range(len(tokens_tickets_list)):
-                tokens_balances_multicall_data[i_two].append(
-                    {tokens_tickets_list[i]: balance_by_address[i] / 10 ** decimals_list[i]}
-                )
+        try:
+            decimals_list = [await contract.functions.decimals().call() for contract in contracts_list]
+            multicall_contract = self.web3.eth.contract(
+                address=self.checksum_address(multicall_eth_contracts), abi=MULTICALL_ABI
+            )
+            multicall_balances = await multicall_contract.functions.balances(
+                checksum_address_list, checksum_tokens_address_list
+            ).call()
+            tokens_balances_multicall_data = [[address] for address in checksum_address_list]
+            for i_one, i_two in zip(
+                    range(0, len(multicall_balances), len(tokens_tickets_list)),
+                    range(len(checksum_address_list))
+            ):
+                balance_by_address = multicall_balances[i_one:i_one + len(tokens_tickets_list)]
+                for i in range(len(tokens_tickets_list)):
+                    tokens_balances_multicall_data[i_two].append(
+                        {tokens_tickets_list[i]: balance_by_address[i] / 10 ** decimals_list[i]}
+                    )
 
-        return True, tokens_balances_multicall_data
+            return True, tokens_balances_multicall_data
+
+        except Exception as e:
+            logger.error(f"Get TOKEN balance multicall ERROR | {e}")
+
+            return None, None

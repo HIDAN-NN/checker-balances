@@ -81,6 +81,8 @@ class CheckerBalancesWeb3():
             multicall_eth_contracts=network_data['multicall_eth_contracts'],
             address_list=self._addresses_list,
         )
+        if native_balance_multicall_data is None:
+            return
 
         for data in native_balance_multicall_data:
             if data[1] > 0:
@@ -89,7 +91,6 @@ class CheckerBalancesWeb3():
                     symbol=network_data['coin'],
                     balance=data[1]
                 )
-
                 logger.info(
                     f"{data[0]} | {network_data['chain']} | {round(data[1], 6)} | {network_data['coin']} |"
                     f" {balance_to_dollar} $ | Native"
@@ -110,6 +111,8 @@ class CheckerBalancesWeb3():
             tokens_tickets_list=[token[0] for token in network_data['tokens'].items() if len(token[1]) >= 42],
             tokens_address_list=[token[1] for token in network_data['tokens'].items() if len(token[1]) >= 42],
         )
+        if is_full_data is None and tokens_balances_multicall_data is None:
+            return
 
         if is_full_data:
             for data in tokens_balances_multicall_data:
