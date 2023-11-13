@@ -56,7 +56,6 @@ class Web3Middleware:
                                           ) -> bool and list:
         checksum_address_list = [self.checksum_address(address) for address in address_list]
         if len(tokens_address_list) == 0:
-
             return False, checksum_address_list
 
         checksum_tokens_address_list = [self.checksum_address(token_address) for token_address in tokens_address_list]
