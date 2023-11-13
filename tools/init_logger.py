@@ -23,7 +23,6 @@ def init_logger():
         activation=[("my_module.secret", False), ("another_library.module", True)],
     )
 
-
 # import logging
 # from colorlog import ColoredFormatter
 
