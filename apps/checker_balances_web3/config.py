@@ -1,3 +1,20 @@
+# True (Yes) / False (No)
+
+# Check native balance?
+check_native_balance_bool = True
+
+# Check tokens balance?
+check_token_balance_bool = True
+
+# Show empty national balances?
+show_empty_native_balances_bool = False
+
+# Show empty token balances?
+show_empty_token_balances_bool = False
+
+# Here you can add evm networks and tokens to each network.
+# To add a token, you need to add the token ticket and the token address to the 'tokens' dictionary.
+# Below is an example.
 networks_data = [
     {
         'chain': 'Ethereum',
@@ -6,7 +23,9 @@ networks_data = [
         'rpc': 'https://rpc.ankr.com/eth',
         'multicall_eth_contracts': "0xb1f8e55c7f64d203c1400b9d8555d050f94adf39",
         'tokens': {
-            'USDT': '',
+            # 'token_ticket': 'token_address',  # Example how to add token
+            'MATIC': '0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0',
+            'USDT': '0xdac17f958d2ee523a2206206994597c13d831ec7',
             'USDC': '',
         }
     },
