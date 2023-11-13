@@ -3,6 +3,8 @@ import logging
 import random
 import time
 
+from loguru import logger
+
 from .config import networks_data
 from .services import Web3Middleware
 from .utils import (
@@ -45,8 +47,8 @@ class CheckerBalancesWeb3():
             balance=native_balance
         )
         time.sleep(random.uniform(self.sleep_form, self.sleep_to))
-        logging.info(
-            f"{address} - {network_data['chain']} - {round(native_balance, 6)} {network_data['coin']} - "
+        logger.success(
+            f"{address} - {network_data['chain']} - {round(native_balance, 6)} - {network_data['coin']}"
             f"{balance_to_dollar} $"
         )
 
@@ -68,7 +70,7 @@ class CheckerBalancesWeb3():
                         balance=token_balance
                     )
                     time.sleep(random.uniform(self.sleep_form, self.sleep_to))
-                    logging.info(
+                    logger.success(
                         f"{address} - {network_data['chain']} - {round(token_balance, 6)} {token[0]} - "
                         f"{balance_to_dollar} $"
                     )
@@ -87,20 +89,14 @@ class CheckerBalancesWeb3():
                     symbol=network_data['coin'],
                     balance=data[1]
                 )
-                # logger.info(
-                #     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']} -"
-                #     f" {balance_to_dollar} $"
-                # )
-                logging.info(
-                    f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']} -"
-                    f" {balance_to_dollar} $"
+
+                logger.info(
+                    f"{data[0]} | {network_data['chain']} | {round(data[1], 6)} | {network_data['coin']} |"
+                    f" {balance_to_dollar} $ | Native"
                 )
             elif self.show_empty_native_balances_bool:
-                # logger.success(
-                #     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']}"
-                # )
-                logging.info(
-                    f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']}"
+                logger.warning(
+                    f"{data[0]} - {network_data['chain']} | {round(data[1], 6)} - {network_data['coin']} | Native"
                 )
 
     async def check_token_balance_multicall(self,
@@ -120,8 +116,8 @@ class CheckerBalancesWeb3():
                 for token in data[1:]:
                     for ticket in token:
                         if ticket in ['USDT', 'BUSD', 'DAI', 'USDC']:
-                            logging.info(
-                                f"{data[0]} - {network_data['chain']} - {round(token[ticket], 6)} {ticket}"
+                            logger.info(
+                                f"{data[0]} | {network_data['chain']} | {round(token[ticket], 6)} {ticket} | Stable"
                             )
                         else:
                             balance_to_dollar = self.convert_balance_to_dollar(
@@ -129,13 +125,13 @@ class CheckerBalancesWeb3():
                                 symbol=ticket,
                                 balance=token[ticket]
                             )
-                            logging.info(
-                                f"{data[0]} - {network_data['chain']} - {round(token[ticket], 6)} {ticket} - "
-                                f"{balance_to_dollar} $"
+                            logger.info(
+                                f"{data[0]} | {network_data['chain']} | {round(token[ticket], 6)} {ticket} | "
+                                f"{balance_to_dollar} $ | Token"
                             )
         if not is_full_data and self.show_empty_token_balances_bool:
             for data in tokens_balances_multicall_data:
-                logging.info(f"{data} - {network_data['chain']} - None")
+                logger.warning(f"{data} | {network_data['chain']} | None | Tokens")
 
     async def main(self):
         if self.check_native_balance_bool:

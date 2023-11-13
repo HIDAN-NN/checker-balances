@@ -5,6 +5,25 @@ from loguru import logger
 from core import LOGS_PATH
 
 
+# logger from loguru
+def init_logger():
+    log_format = (
+        "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> "
+        "| <level>{level}</level> "
+        "| <cyan>{function}</cyan> "
+        "| <level>{message}</level>"
+    )
+    logger.configure(
+        handlers=[
+            dict(sink=sys.stderr, format=log_format),
+            dict(sink=LOGS_PATH, enqueue=True),  # serialize=True
+        ],
+        # levels=[dict(name="NEW", no=13, icon="¤", color="")],
+        extra={"common_to_all": "default"},
+        activation=[("my_module.secret", False), ("another_library.module", True)],
+    )
+
+
 # import logging
 # from colorlog import ColoredFormatter
 
@@ -35,25 +54,11 @@ from core import LOGS_PATH
 #
 #     root_logger.setLevel(logging.DEBUG if is_verbose else logging.INFO)
 
+# Example code in function
+# logging.info(
+#     f"{data[0]} - {network_data['chain']} - {round(data[1], 6)} - {network_data['coin']}"
+# )
+
 # Example for start file
 # if __name__ == "__main__":
 #     init_logging(is_verbose=False)
-
-
-# logger from loguru
-def init_logger():
-    log_format = (
-        "<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> "
-        "| <level>{level}</level> "
-        "| <cyan>{function}</cyan> "
-        "| <level>{message}</level>"
-    )
-    logger.configure(
-        handlers=[
-            dict(sink=sys.stderr, format=log_format),
-            dict(sink=LOGS_PATH, enqueue=True),  # serialize=True
-        ],
-        # levels=[dict(name="NEW", no=13, icon="¤", color="")],
-        extra={"common_to_all": "default"},
-        activation=[("my_module.secret", False), ("another_library.module", True)],
-    )
