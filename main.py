@@ -1,7 +1,7 @@
 import asyncio
 
 from apps import CheckerBalancesWeb3
-from tools import init_logging
+from tools import init_logger
 
 
 def main() -> None:
@@ -16,5 +16,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    init_logging(is_verbose=False)
+    init_logger()
     main()
