@@ -134,6 +134,9 @@ class CheckerBalancesWeb3():
                 logger.warning(f"{data} | {network_data['chain']} | None | Tokens")
 
     async def main(self):
+        logger.success(
+            "Check balance Web3 | Start"
+        )
         if self.check_native_balance_bool:
             tasks = [
                 self.check_native_balance_multicall(
@@ -151,3 +154,7 @@ class CheckerBalancesWeb3():
                 for network_data in self.networks_data
             ]
             await asyncio.gather(*tasks)
+
+        logger.success(
+            "Check balance Web3 | End"
+        )
