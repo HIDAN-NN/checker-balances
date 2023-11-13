@@ -8,14 +8,14 @@ if getattr(sys, 'frozen', False):
 else:
     ROOT_PATH = Path(__file__).parent.parent.absolute()
 
-ADDRESSES_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('data').joinpath('addresses.txt')
-ERC20_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('data').joinpath('erc20.json')
+ADDRESSES_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('data/addresses.txt')
+ERC20_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('data/erc20.json')
+LOGS_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('results/logfile.log')
 
-# Example
+# Example Path
 # ROOT_PATH: Final[pathlib.Path] = pathlib.Path(__file__).parents[1]
-# OUTPUT_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('results')
-# INPUT_PATH: Final[pathlib.Path] = ROOT_PATH.joinpath('app/input_urls.txt')
-#
+
+# Example typing
 # T_URL: TypeAlias = str
 # T_URLS: TypeAlias = list[T_URL]
 #
