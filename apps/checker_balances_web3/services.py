@@ -43,7 +43,7 @@ class Web3Middleware:
                 for balance, address in zip(multicall_balances, checksum_address_list)
             ]
         except Exception as e:
-            logger.error(f"Get NATIVE balance multicall ERROR | {e}")
+            logger.error(f"Get NATIVE balance multicall error | {e}")
 
             return None
 
@@ -86,6 +86,6 @@ class Web3Middleware:
             return True, tokens_balances_multicall_data
 
         except Exception as e:
-            logger.error(f"Get TOKEN balance multicall ERROR | {e}")
+            logger.error(f"Get TOKEN balance multicall error | {e}")
 
             return None, None
